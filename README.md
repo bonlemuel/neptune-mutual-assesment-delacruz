@@ -4,20 +4,20 @@ This project is for my submission for the Neptune Mutual Assignment.
 
 ## To Run:
 
+Install Dependencies
 ```
 yarn install
 ```
-Install Dependencies
 
+Run on local machine
 ```
 yarn dev
 ```
-Run on local machine
 
+Build project
 ```
 yarn build
 ```
-Build project
 
 # Online Demo
 ```
