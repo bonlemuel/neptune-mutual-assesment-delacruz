@@ -1,11 +1,13 @@
 import Link from "next/link";
-import Layout from "../components/Layout";
-import Converter from "../components/Converter";
+import { Converter, Layout } from "../components";
+import { NextUIProvider } from "@nextui-org/react";
 
 const IndexPage = () => (
-  <Layout title="Neptune Mutual Currency Converter">
-    <Converter />
-  </Layout>
+  <NextUIProvider>
+    <Layout title="Neptune Mutual Currency Converter">
+      <Converter />
+    </Layout>
+  </NextUIProvider>
 );
 
 export default IndexPage;
