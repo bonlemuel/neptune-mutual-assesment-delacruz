@@ -56,7 +56,7 @@ function Recharts({ isDefault }: Props) {
     labels,
     datasets: [
       {
-        label: "Exchange",
+        label: "Rate",
         data: [1, 2, 3, 4, 5, 6, 7, 8, 9].sort((a, b) => 0.5 - Math.random()),
         borderColor: "rgb(129 201 149)",
         backgroundColor: "rgba(129 201 149)",
