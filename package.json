@@ -7,7 +7,10 @@
     "type-check": "tsc"
   },
   "dependencies": {
+    "@ethersproject/units": "^5.6.0",
     "@nextui-org/react": "^1.0.8-beta.5",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
     "axios": "^0.26.1",
     "chart.js": "^3.7.1",
     "moment": "^2.29.2",
@@ -15,7 +18,8 @@
     "react": "^17.0.2",
     "react-chartjs-2": "^4.1.0",
     "react-dom": "^17.0.2",
-    "react-iconly": "^2.2.5"
+    "react-iconly": "^2.2.5",
+    "web3": "^1.7.3"
   },
   "devDependencies": {
     "@types/node": "^12.12.21",

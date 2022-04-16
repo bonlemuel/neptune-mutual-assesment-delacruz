@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useEffect } from "react";
 import { Text, Image, Card, Grid } from "@nextui-org/react";
-import { Input, Recharts, Button } from "../components";
+import { Input, Recharts, Button, Metamask, Loader } from "../components";
 import { Swap } from "react-iconly";
 import moment from "moment";
 
@@ -13,15 +13,15 @@ const styles = {
     background: "#01052d",
     height: "100vh",
     width: "100vw",
-    paddingTop: "5vh",
+    paddingTop: "4vh",
   },
   logoContainer: {
     display: "flex",
     flexDirection: "row" as "row",
     justifyContent: "center",
     alignItems: "center",
-    maxWidth: 450,
-    padding: 20,
+    maxWidth: 350,
+    padding: 10,
     cursor: "pointer",
   },
   logo: {
@@ -30,7 +30,7 @@ const styles = {
     height: "auto",
   },
   card: {
-    m: "$10",
+    m: "$5",
     p: "$5",
     width: "auto",
   },
@@ -43,6 +43,14 @@ const styles = {
     bottom: 20,
     right: 20,
   },
+  disclaimerContainer: {
+    marginTop: 10,
+    width: "100%",
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+  },
+  disclaimerText: { textAlign: "right", width: "60%" },
 };
 
 type Props = {
@@ -50,25 +58,31 @@ type Props = {
 };
 
 const Converter = (props) => {
-  const [nep, setNep] = useState(0.0);
-  const [busd, setBusd] = useState(0.0);
+  const [nep, setNep] = useState("");
+  const [busd, setBusd] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [isDefault, setIsDefault] = useState(true);
 
   const onChangeValue = (type, value) => {
+    /**
+     * * Validation: Don't allow alpha characters
+     * */
     let stringTest = /^\d*\.?\d*$/;
-    /** Validation */
     if (!stringTest.test(value) && value !== "") {
       return;
     }
 
-    let result = 0;
+    /**
+     * * Converter Computation
+     */
+    let result = "";
     if (type === "NEP") {
-      result = Math.round(parseFloat(value) * 3 * 100) / 100;
+      result = ((Math.round(parseFloat(value) * 3) * 100) / 100).toFixed(2);
       setBusd(result);
       setNep(value);
     }
     if (type === "BUSD") {
-      result = Math.round((parseFloat(value) / 3) * 100) / 100;
+      result = (Math.round((parseFloat(value) / 3) * 100) / 100).toFixed(2);
       setNep(result);
       setBusd(value);
     }
@@ -92,7 +106,7 @@ const Converter = (props) => {
       <Text i color={isDefault ? "success" : "error"}>
         {isDefault ? "+0.5 (16%) ▲ today" : "-0.5 (16%) ▼ today"}
       </Text>
-      <Text size={12}>{moment().format("MMM DD, HH:mm A") + " PST"}</Text>
+      <Text size={12}>{moment().format("MMM DD, hh:mm A") + " PST"}</Text>
     </>
   );
 
@@ -104,11 +118,19 @@ const Converter = (props) => {
         <Input
           label={isDefault ? "NEP" : "BUSD"}
           placeholder="0.00"
-          value={isDefault ? (nep ? nep : "") : busd ? busd : ""}
+          value={nep && busd ? (isDefault ? nep : busd) : ""}
           onChangeValue={onChangeValue}
         />
       </Grid>
-      <Grid xs={12} sm={2} md={2} lg={2} alignItems={"center"} justify={"center"}>
+      <Grid
+        xs={12}
+        sm={2}
+        md={2}
+        lg={2}
+        style={{ marginTop: 27 }}
+        alignItems={"center"}
+        justify={"center"}
+      >
         <Button
           auto
           icon={<Swap set="bold" primaryColor="white" />}
@@ -119,21 +141,30 @@ const Converter = (props) => {
         <Input
           label={isDefault ? "BUSD" : "NEP"}
           placeholder="0.00"
-          value={isDefault ? (busd ? busd : "") : nep ? nep : ""}
+          value={nep && busd ? (isDefault ? busd : nep) : ""}
           onChangeValue={onChangeValue}
         />
       </Grid>
     </Grid.Container>
   );
 
-  const renderFooter = () => (
+  const _renderDisclaimer = () => (
+    <div style={styles.disclaimerContainer}>
+      <Text css={styles.disclaimerText} size={10}>
+        <b>Developer Remarks:</b> NEP-BUSD rates and chart values are randomly generated
+        for this assignment
+      </Text>
+    </div>
+  );
+
+  const _renderFooter = () => (
     <div style={styles.footer}>
       <Text
         css={{ cursor: "pointer" }}
         color="white"
-        onClick={() => window.open("https://www.linkedin.com/in/bonlemueldelacruz/")}
+        onClick={() => window.open("https://linktr.ee/bonlemuel")}
       >
-        {"Created by "}
+        {"Developed by "}
         <b>{"Bon Lemuel Dela Cruz"}</b>
       </Text>
     </div>
@@ -141,14 +172,16 @@ const Converter = (props) => {
 
   return (
     <div style={styles.root}>
+      <Loader show={isLoading} />
       {_renderLogo()}
       <Card css={styles.card}>
         {_renderCardHeader()}
         {_renderCharts()}
+        {_renderDisclaimer()}
         {_renderForm()}
-        <Button label="Check Wallet Details" />
+        <Metamask setIsLoading={setIsLoading} />
       </Card>
-      {renderFooter()}
+      {_renderFooter()}
     </div>
   );
 };
