@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Converter, Layout } from "../components";
 import { NextUIProvider } from "@nextui-org/react";
 

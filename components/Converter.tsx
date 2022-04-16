@@ -8,19 +8,21 @@ const styles = {
   root: {
     display: "flex",
     flexDirection: "column" as "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     background: "#01052d",
     height: "100vh",
     width: "100vw",
+    paddingTop: "5vh",
   },
   logoContainer: {
     display: "flex",
     flexDirection: "row" as "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    maxWidth: 450,
     padding: 20,
+    cursor: "pointer",
   },
   logo: {
     alignSelf: "center",
@@ -36,11 +38,15 @@ const styles = {
     marginTop: 10,
     marginBottom: 10,
   },
+  footer: {
+    position: "absolute" as "absolute",
+    bottom: 20,
+    right: 20,
+  },
 };
 
 type Props = {
   children?: ReactNode;
-  title?: string;
 };
 
 const Converter = (props) => {
@@ -50,10 +56,12 @@ const Converter = (props) => {
 
   const onChangeValue = (type, value) => {
     let stringTest = /^\d*\.?\d*$/;
-    let result = 0;
+    /** Validation */
     if (!stringTest.test(value) && value !== "") {
       return;
     }
+
+    let result = 0;
     if (type === "NEP") {
       result = Math.round(parseFloat(value) * 3 * 100) / 100;
       setBusd(result);
@@ -65,6 +73,18 @@ const Converter = (props) => {
       setBusd(value);
     }
   };
+
+  const _renderLogo = () => (
+    <div
+      style={styles.logoContainer}
+      onClick={() => window.open("https://neptunemutual.com/")}
+    >
+      <Image
+        style={styles.logo}
+        src={"https://neptunemutual.com/logos/neptune-mutual-full-inverse.png"}
+      />
+    </div>
+  );
 
   const _renderCardHeader = () => (
     <>
@@ -81,21 +101,12 @@ const Converter = (props) => {
   const _renderForm = () => (
     <Grid.Container css={styles.inputContainer} gap={1} justify="center">
       <Grid xs={12} sm={5} md={5} lg={5}>
-        {isDefault ? (
-          <Input
-            label={"NEP"}
-            placeholder="0.00"
-            value={nep ? nep : ""}
-            onChangeValue={onChangeValue}
-          />
-        ) : (
-          <Input
-            label={"BUSD"}
-            placeholder="0.00"
-            value={busd ? busd : ""}
-            onChangeValue={onChangeValue}
-          />
-        )}
+        <Input
+          label={isDefault ? "NEP" : "BUSD"}
+          placeholder="0.00"
+          value={isDefault ? (nep ? nep : "") : busd ? busd : ""}
+          onChangeValue={onChangeValue}
+        />
       </Grid>
       <Grid xs={12} sm={2} md={2} lg={2} alignItems={"center"} justify={"center"}>
         <Button
@@ -105,39 +116,39 @@ const Converter = (props) => {
         />
       </Grid>
       <Grid xs={12} sm={5} md={5} lg={5}>
-        {isDefault ? (
-          <Input
-            label={"BUSD"}
-            placeholder="0.00"
-            value={busd ? busd : ""}
-            onChangeValue={onChangeValue}
-          />
-        ) : (
-          <Input
-            label={"NEP"}
-            placeholder="0.00"
-            value={nep ? nep : ""}
-            onChangeValue={onChangeValue}
-          />
-        )}
+        <Input
+          label={isDefault ? "BUSD" : "NEP"}
+          placeholder="0.00"
+          value={isDefault ? (busd ? busd : "") : nep ? nep : ""}
+          onChangeValue={onChangeValue}
+        />
       </Grid>
     </Grid.Container>
   );
 
+  const renderFooter = () => (
+    <div style={styles.footer}>
+      <Text
+        css={{ cursor: "pointer" }}
+        color="white"
+        onClick={() => window.open("https://www.linkedin.com/in/bonlemueldelacruz/")}
+      >
+        {"Created by "}
+        <b>{"Bon Lemuel Dela Cruz"}</b>
+      </Text>
+    </div>
+  );
+
   return (
     <div style={styles.root}>
-      <div style={styles.logoContainer}>
-        <Image
-          style={styles.logo}
-          src={"https://neptunemutual.com/logos/neptune-mutual-full-inverse.png"}
-        />
-      </div>
+      {_renderLogo()}
       <Card css={styles.card}>
         {_renderCardHeader()}
         {_renderCharts()}
         {_renderForm()}
         <Button label="Check Wallet Details" />
       </Card>
+      {renderFooter()}
     </div>
   );
 };
