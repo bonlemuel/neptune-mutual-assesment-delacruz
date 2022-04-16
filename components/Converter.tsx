@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useEffect } from "react";
 import { Text, Image, Card, Grid } from "@nextui-org/react";
-import { Input, Recharts, Button } from "../components";
+import { Input, Recharts, Button, Metamask, Loader } from "../components";
 import { Swap } from "react-iconly";
 import moment from "moment";
 
@@ -50,28 +50,38 @@ type Props = {
 };
 
 const Converter = (props) => {
-  const [nep, setNep] = useState(0.0);
-  const [busd, setBusd] = useState(0.0);
+  const [nep, setNep] = useState("");
+  const [busd, setBusd] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [isDefault, setIsDefault] = useState(true);
 
   const onChangeValue = (type, value) => {
+    /**
+     * * Validation: Don't allow alpha characters
+     * */
     let stringTest = /^\d*\.?\d*$/;
-    /** Validation */
     if (!stringTest.test(value) && value !== "") {
       return;
     }
 
-    let result = 0;
+    /**
+     * * Converter Computation
+     */
+    let result = "";
     if (type === "NEP") {
-      result = Math.round(parseFloat(value) * 3 * 100) / 100;
+      result = ((Math.round(parseFloat(value) * 3) * 100) / 100).toFixed(2);
       setBusd(result);
       setNep(value);
     }
     if (type === "BUSD") {
-      result = Math.round((parseFloat(value) / 3) * 100) / 100;
+      result = (Math.round((parseFloat(value) / 3) * 100) / 100).toFixed(2);
       setNep(result);
       setBusd(value);
     }
+  };
+
+  const onCheckWalletHandler = () => {
+    setIsLoading(true);
   };
 
   const _renderLogo = () => (
@@ -92,7 +102,7 @@ const Converter = (props) => {
       <Text i color={isDefault ? "success" : "error"}>
         {isDefault ? "+0.5 (16%) ▲ today" : "-0.5 (16%) ▼ today"}
       </Text>
-      <Text size={12}>{moment().format("MMM DD, HH:mm A") + " PST"}</Text>
+      <Text size={12}>{moment().format("MMM DD, hh:mm A") + " PST"}</Text>
     </>
   );
 
@@ -141,12 +151,13 @@ const Converter = (props) => {
 
   return (
     <div style={styles.root}>
+      <Loader show={isLoading} />
       {_renderLogo()}
       <Card css={styles.card}>
         {_renderCardHeader()}
         {_renderCharts()}
         {_renderForm()}
-        <Button label="Check Wallet Details" />
+        <Metamask onCheckWalletHandler={onCheckWalletHandler} />
       </Card>
       {renderFooter()}
     </div>
