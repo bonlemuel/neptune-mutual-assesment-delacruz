@@ -37,7 +37,7 @@ In order to build this project, below are the framework/plugins integrated.
 * ✅ Round the numbers to two decimal places
 * ✅ Clean code and best practices followed
 * ✅ Any improvisation that improves the UX
-
+* ✅ Mobile Responsive Support
 
 # Online Demo
 [https://neptune.bonlemueldelacruz.com](https://neptune.bonlemueldelacruz.com/)
