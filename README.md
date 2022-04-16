@@ -40,7 +40,7 @@ In order to build this project, below are the framework / plugins integrated.
 * ✅ Mobile Responsive Support
 
 # Online Demo
-[https://neptune.bonlemueldelacruz.com](https://neptune.bonlemueldelacruz.com/)
+[https://neptunemutual.bonlemueldelacruz.com](https://neptunemutual.bonlemueldelacruz.com/)
 
 
 # Author
