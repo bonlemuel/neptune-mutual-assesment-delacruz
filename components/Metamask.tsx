@@ -25,19 +25,14 @@ const styles = {
 };
 
 type Props = {
-  label?: string;
-  style?: object;
-  auto?: boolean;
-  icon?: ReactNode;
-  onClick?: any;
-  onCheckWalletHandler?: any;
+  setIsLoading?: any;
 };
 
 const INJECTED = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42, 97],
 });
 
-const Metamask = ({ auto }: Props) => {
+const Metamask = ({ setIsLoading }: Props) => {
   const { active, account, library, connector, activate, deactivate, chainId, error } =
     useWeb3React();
 
@@ -54,6 +49,7 @@ const Metamask = ({ auto }: Props) => {
        * * Get Account Balance
        */
       handleGetBalance();
+      setIsLoading(false);
     }
   }, [active]);
 
@@ -87,6 +83,7 @@ const Metamask = ({ auto }: Props) => {
 
   async function connectWallet() {
     console.debug("---- Connect Wallet ----");
+    setIsLoading(true);
     try {
       await activate(INJECTED).then((value) => {});
     } catch (ex) {
@@ -195,7 +192,7 @@ const Metamask = ({ auto }: Props) => {
     <>
       {!active ? _renderConnectWalletModal() : _renderWalletDetailsModal()}
       <NextButton
-        auto={auto}
+        auto
         color={!active ? "default" : "success"}
         icon={<Wallet set="bold" primaryColor="white" />}
         onClick={() => handleModal(true)}

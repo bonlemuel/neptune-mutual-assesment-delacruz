@@ -13,15 +13,15 @@ const styles = {
     background: "#01052d",
     height: "100vh",
     width: "100vw",
-    paddingTop: "5vh",
+    paddingTop: "4vh",
   },
   logoContainer: {
     display: "flex",
     flexDirection: "row" as "row",
     justifyContent: "center",
     alignItems: "center",
-    maxWidth: 450,
-    padding: 20,
+    maxWidth: 350,
+    padding: 10,
     cursor: "pointer",
   },
   logo: {
@@ -30,7 +30,7 @@ const styles = {
     height: "auto",
   },
   card: {
-    m: "$10",
+    m: "$5",
     p: "$5",
     width: "auto",
   },
@@ -43,6 +43,14 @@ const styles = {
     bottom: 20,
     right: 20,
   },
+  disclaimerContainer: {
+    marginTop: 10,
+    width: "100%",
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+  },
+  disclaimerText: { textAlign: "right", width: "60%" },
 };
 
 type Props = {
@@ -80,10 +88,6 @@ const Converter = (props) => {
     }
   };
 
-  const onCheckWalletHandler = () => {
-    setIsLoading(true);
-  };
-
   const _renderLogo = () => (
     <div
       style={styles.logoContainer}
@@ -114,11 +118,19 @@ const Converter = (props) => {
         <Input
           label={isDefault ? "NEP" : "BUSD"}
           placeholder="0.00"
-          value={isDefault ? (nep ? nep : "") : busd ? busd : ""}
+          value={nep && busd ? (isDefault ? nep : busd) : ""}
           onChangeValue={onChangeValue}
         />
       </Grid>
-      <Grid xs={12} sm={2} md={2} lg={2} alignItems={"center"} justify={"center"}>
+      <Grid
+        xs={12}
+        sm={2}
+        md={2}
+        lg={2}
+        style={{ marginTop: 27 }}
+        alignItems={"center"}
+        justify={"center"}
+      >
         <Button
           auto
           icon={<Swap set="bold" primaryColor="white" />}
@@ -129,21 +141,30 @@ const Converter = (props) => {
         <Input
           label={isDefault ? "BUSD" : "NEP"}
           placeholder="0.00"
-          value={isDefault ? (busd ? busd : "") : nep ? nep : ""}
+          value={nep && busd ? (isDefault ? busd : nep) : ""}
           onChangeValue={onChangeValue}
         />
       </Grid>
     </Grid.Container>
   );
 
-  const renderFooter = () => (
+  const _renderDisclaimer = () => (
+    <div style={styles.disclaimerContainer}>
+      <Text css={styles.disclaimerText} size={10}>
+        <b>Developer Remarks:</b> NEP-BUSD rates and chart values are randomly generated
+        for this assignment
+      </Text>
+    </div>
+  );
+
+  const _renderFooter = () => (
     <div style={styles.footer}>
       <Text
         css={{ cursor: "pointer" }}
         color="white"
-        onClick={() => window.open("https://www.linkedin.com/in/bonlemueldelacruz/")}
+        onClick={() => window.open("https://linktr.ee/bonlemuel")}
       >
-        {"Created by "}
+        {"Developed by "}
         <b>{"Bon Lemuel Dela Cruz"}</b>
       </Text>
     </div>
@@ -156,10 +177,11 @@ const Converter = (props) => {
       <Card css={styles.card}>
         {_renderCardHeader()}
         {_renderCharts()}
+        {_renderDisclaimer()}
         {_renderForm()}
-        <Metamask onCheckWalletHandler={onCheckWalletHandler} />
+        <Metamask setIsLoading={setIsLoading} />
       </Card>
-      {renderFooter()}
+      {_renderFooter()}
     </div>
   );
 };
