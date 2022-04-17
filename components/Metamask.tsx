@@ -53,6 +53,12 @@ const Metamask = ({ setIsLoading }: Props) => {
     }
   }, [active]);
 
+  useEffect(() => {
+    if (error) {
+      setIsLoading(false);
+    }
+  }, [error]);
+
   const handleFormatAddress = (address) => {
     return (
       address.substring(0, 5) +
