@@ -1,4 +1,4 @@
-# Neptune Mutual Assignment
+# React JS Web 3 Integration
 
 Simple Web 3 Integration
 
